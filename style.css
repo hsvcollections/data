@@ -92,7 +92,7 @@ body {
 }
 
 .quiz-item:hover {
-    background-color: #f1f3f5;
+    background-color: #FFFDD0;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 .search-container {
