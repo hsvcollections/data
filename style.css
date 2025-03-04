@@ -23,7 +23,7 @@ body {
 }
 
 .search-box {
-    width: 75%;
+    width: 98%;
     padding: 10px;
     border-radius: 25px;
     font-size: 16px;
@@ -98,7 +98,7 @@ body {
 .search-container {
     position: sticky;
     top: 0;
-    width: 98%;
+    width: 70%;
     background: #fff;
     padding: 10px;
     z-index: 100;
