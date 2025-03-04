@@ -71,3 +71,28 @@
         updateQuestionNumbers();
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+      const searchInput = document.getElementById("search");
+      const quizItems = document.querySelectorAll(".quiz-item");
+      const questionCountElement = document.getElementById("question-count");
+
+      // Set initial question count
+      questionCountElement.textContent = `Total Questions: ${quizItems.length}`;
+
+      searchInput.addEventListener("input", function () {
+        const searchQuery = searchInput.value.toLowerCase();
+        let matchedCount = 0;
+
+        quizItems.forEach((item) => {
+          if (item.textContent.toLowerCase().includes(searchQuery)) {
+            item.style.display = "block";
+            matchedCount++;
+          } else {
+            item.style.display = "none";
+          }
+        });
+
+        questionCountElement.textContent = `${matchedCount}/${quizItems.length}`;
+      });
+    });
