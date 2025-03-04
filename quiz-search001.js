@@ -80,3 +80,38 @@ document.addEventListener("DOMContentLoaded", function () {
         updateQuestionNumbers();
     });
 });
+
+document.addEventListener("DOMContentLoaded", function () {
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function shuffleQuiz() {
+            const quizContainer = document.querySelector(".quiz-container");
+            const quizItems = Array.from(quizContainer.querySelectorAll(".quiz-item"));
+
+            // Shuffle the quiz items
+            shuffleArray(quizItems);
+
+            // Shuffle the options inside each quiz item
+            quizItems.forEach(quizItem => {
+                const optionsList = quizItem.querySelector(".options");
+                const options = Array.from(optionsList.children);
+
+                shuffleArray(options);
+
+                // Re-add shuffled options
+                optionsList.innerHTML = "";
+                options.forEach(option => optionsList.appendChild(option));
+            });
+
+            // Re-add shuffled quiz items
+            quizContainer.innerHTML = "";
+            quizItems.forEach(item => quizContainer.appendChild(item));
+        }
+
+        shuffleQuiz();
+    });
