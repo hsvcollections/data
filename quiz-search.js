@@ -1,43 +1,45 @@
-    document.addEventListener("DOMContentLoaded", function () {
-    let quizItems = document.querySelectorAll(".quiz-item");
-    let data = [];
+document.addEventListener("DOMContentLoaded", function () {
+    let quizItems = Array.from(document.querySelectorAll(".quiz-item"));
     let noResultsMessage = document.querySelector(".no-results");
+    let questionCountElement = document.getElementById("question-count");
+    let searchInput = document.getElementById("search");
 
-    // Function to update question and option numbering
+    let data = [];
+
+    // Function to update question and option numbering dynamically
     function updateQuestionNumbers() {
-        quizItems.forEach((item, index) => {
-            // Add question number
+        let visibleItems = quizItems.filter(item => item.style.display !== "none");
+        visibleItems.forEach((item, index) => {
             let question = item.querySelector(".question");
             if (question) {
-                question.innerText = `${index + 1}. ${question.innerText.replace(/^\d+\.\s*/, '')}`; // Ensure clean numbering
+                question.innerText = `${index + 1}. ${question.innerText.replace(/^\d+\.\s*/, '')}`;
             }
 
-            // Add option labels
             let options = item.querySelectorAll(".options li");
             options.forEach((opt, i) => {
-                let optionPrefix = String.fromCharCode(97 + i); // 'a' = 97, 'b' = 98, etc.
+                let optionPrefix = String.fromCharCode(97 + i); // 'a', 'b', 'c', etc.
                 opt.innerText = `${optionPrefix}. ${opt.innerText.replace(/^[a-e]\.\s*/, '')}`;
             });
         });
     }
 
-    // Store questions and options in an array
+    // Store questions and options for searching
     quizItems.forEach((item, index) => {
         let questionText = item.querySelector(".question").innerText;
         let options = item.querySelectorAll(".options li");
 
-        // Add the question itself as a searchable item
         data.push({ id: index, text: questionText, element: item });
 
-        // Add each option as a separate searchable item
-        options.forEach((opt, i) => {
-            let optionText = opt.innerText;
-            data.push({ id: index, text: optionText, element: item });
+        options.forEach(opt => {
+            data.push({ id: index, text: opt.innerText, element: item });
         });
     });
 
-    // Apply numbering initially
+    // Apply initial numbering
     updateQuestionNumbers();
+    
+    // Set initial question count
+    questionCountElement.textContent = `${quizItems.length}`;
 
     // Initialize Fuse.js for fuzzy searching
     const fuse = new Fuse(data, {
@@ -45,18 +47,22 @@
         threshold: 0.3,
     });
 
-    document.getElementById("search").addEventListener("input", function () {
-        let input = this.value.trim();
+    searchInput.addEventListener("input", function () {
+        let input = this.value.trim().toLowerCase();
+        let matchedCount = 0;
+
         if (input === "") {
+            // Show all items and reset numbering
             quizItems.forEach(item => item.style.display = "block");
-            noResultsMessage.style.display = "none"; // Hide "No data found" message
-            updateQuestionNumbers(); // Reapply numbering
+            noResultsMessage.style.display = "none";
+            updateQuestionNumbers();
+            questionCountElement.textContent = `${quizItems.length}`;
             return;
         }
 
         let results = fuse.search(input);
 
-        // Hide all items first
+        // Hide all first
         quizItems.forEach(item => item.style.display = "none");
 
         // Show matched items
@@ -64,35 +70,13 @@
             res.item.element.style.display = "block";
         });
 
-        // Show "No data found" message if no results
-        noResultsMessage.style.display = results.length === 0 ? "block" : "none";
+        matchedCount = results.length;
+        noResultsMessage.style.display = matchedCount === 0 ? "block" : "none";
 
-        // Reapply numbering only to visible items
+        // Update the question count display
+        questionCountElement.textContent = `${matchedCount}/${quizItems.length}`;
+
+        // Reapply numbering only for visible items
         updateQuestionNumbers();
     });
 });
-
-    document.addEventListener("DOMContentLoaded", function () {
-      const searchInput = document.getElementById("search");
-      const quizItems = document.querySelectorAll(".quiz-item");
-      const questionCountElement = document.getElementById("question-count");
-
-      // Set initial question count
-      questionCountElement.textContent = `${quizItems.length}`;
-
-      searchInput.addEventListener("input", function () {
-        const searchQuery = searchInput.value.toLowerCase();
-        let matchedCount = 0;
-
-        quizItems.forEach((item) => {
-          if (item.textContent.toLowerCase().includes(searchQuery)) {
-            item.style.display = "block";
-            matchedCount++;
-          } else {
-            item.style.display = "none";
-          }
-        });
-
-        questionCountElement.textContent = `${matchedCount}/${quizItems.length}`;
-      });
-    });
