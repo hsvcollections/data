@@ -81,3 +81,21 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+        function filterQuestions() {
+            var selectedType = document.getElementById("question-type").value;
+            var allQuestions = document.querySelectorAll(".quiz-item");
+
+            allQuestions.forEach(function(question) {
+                if (selectedType === "all") {
+                    question.style.display = "block";
+                } else if (question.classList.contains(selectedType)) {
+                    question.style.display = "block";
+                } else {
+                    question.style.display = "none";
+                }
+            });
+        }
+
+        // Show all questions initially
+        filterQuestions();
+
