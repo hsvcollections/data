@@ -127,6 +127,7 @@ body {
  float: right; 
  align-items: right; 
  gap: 10px; 
+}
 #question-type {
     border: none;
     outline: none; 
