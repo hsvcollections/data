@@ -113,3 +113,9 @@ body {
             cursor: pointer;
             margin-bottom: 20px;
         }
+.quiz-container01 {
+    display: flex;
+    flex-direction: column; /* Stack elements vertically */
+    align-items: center; /* Center horizontally */
+    gap: 10px; /* Add spacing between elements */
+}
