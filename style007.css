@@ -123,11 +123,10 @@ body {
 }
 
 .quiz-container01 {
-    display: flex;
-    text-align: right; 
+ text-align: right; 
  float: right; 
-    align-items: right; 
-    gap: 10px; 
+ align-items: right; 
+ gap: 10px; 
 #question-type {
     border: none;
     outline: none; 
